@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
+import ErrorBoundry from '../components/ErrorBoundry';
 
 class App extends Component{
     constructor(){
@@ -10,7 +11,6 @@ class App extends Component{
         this.state = {
             robots:[],
             searchField: '',
-
         }
     }
 
@@ -25,7 +25,6 @@ class App extends Component{
         })
     }
 
-
     onSearchRobots = (event) =>{
         this.setState({searchField:event.target.value});
     }
@@ -35,7 +34,6 @@ class App extends Component{
         const filterRobots = robots.filter((robot) => {
             return robot.username.toLowerCase().trim().includes(searchField.toLowerCase().trim());
         });
-
         return !robots.length ?
             <h1>loading...</h1>
             :
@@ -44,7 +42,9 @@ class App extends Component{
                     <h1>Robot friends</h1>
                     <SearchBox searchRobots = {this.onSearchRobots}/>
                     <Scroll scrollHeight = {800}>
-                        <CardList robots = {filterRobots}/>
+                        <ErrorBoundry>
+                            <CardList robots = {filterRobots}/>
+                        </ErrorBoundry>
                     </Scroll>
                 </div>
             )
